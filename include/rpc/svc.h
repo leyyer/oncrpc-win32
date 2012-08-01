@@ -107,11 +107,11 @@ typedef struct {
 	    bool_t	(*xp_freeargs)();/* free mem allocated for args */
 	    void	(*xp_destroy)(); /* destroy this struct */
 	} *xp_ops;
-	int		xp_addrlen;	 /* length of remote address */
-	struct sockaddr_in xp_raddr;	 /* remote address */
-	struct opaque_auth xp_verf;	 /* raw response verifier */
-	caddr_t		xp_p1;		 /* private */
-	caddr_t		xp_p2;		 /* private */
+	int                xp_addrlen; /* length of remote address */
+	struct sockaddr_in xp_raddr; /* remote address */
+	struct opaque_auth xp_verf; /* raw response verifier */
+	caddr_t            xp_p1;  /* private */
+	caddr_t            xp_p2;  /* private */
 } SVCXPRT;
 
 /*
@@ -162,12 +162,12 @@ typedef struct {
  * Service request
  */
 struct svc_req {
-	u_long		rq_prog;	/* service program number */
-	u_long		rq_vers;	/* service protocol version */
-	u_long		rq_proc;	/* the desired procedure */
-	struct opaque_auth rq_cred;	/* raw creds from the wire */
-	caddr_t		rq_clntcred;	/* read only cooked cred */
-	SVCXPRT	*rq_xprt;		/* associated transport */
+	u_long              rq_prog; /* service program number */
+	u_long              rq_vers; /* service protocol version */
+	u_long              rq_proc; /* the desired procedure */
+	struct opaque_auth  rq_cred; /* raw creds from the wire */
+	caddr_t             rq_clntcred; /* read only cooked cred */
+	SVCXPRT            *rq_xprt; /* associated transport */
 };
 
 

@@ -98,22 +98,16 @@ static struct	xdr_ops xdrmem_ops = {
  * memory buffer.  
  */
 void
-xdrmem_create(xdrs, addr, size, op)
-	register XDR *xdrs;
-	caddr_t addr;
-	u_int size;
-	enum xdr_op op;
+xdrmem_create(XDR *xdrs, caddr_t addr, u_int size, enum xdr_op op)
 {
-
-	xdrs->x_op = op;
-	xdrs->x_ops = &xdrmem_ops;
+	xdrs->x_op		= op;
+	xdrs->x_ops		= &xdrmem_ops;
 	xdrs->x_private = xdrs->x_base = addr;
-	xdrs->x_handy = size;
+	xdrs->x_handy	= size;
 }
 
 static void
-xdrmem_destroy(/*xdrs*/)
-	/*XDR *xdrs;*/
+xdrmem_destroy(XDR *xdrs)
 {
 }
 
