@@ -1922,178 +1922,178 @@ bool_t xdr_SETATTR3res();
 #define NFS3_NULL ((u_long)0)
 #ifdef __cplusplus
 extern "C" {
-extern void *nfs3_null_3(...);
+extern int nfs3_null_3(...);
 }
 #else
-extern void *nfs3_null_3();
+extern int nfs3_null_3();
 #endif /* __cplusplus */
 #define NFS3_GETATTR ((u_long)1)
 #ifdef __cplusplus
 extern "C" {
-extern GETATTR3res *nfs3_getattr_3(...);
+extern int nfs3_getattr_3(...);
 }
 #else
-extern GETATTR3res *nfs3_getattr_3();
+extern int nfs3_getattr_3();
 #endif /* __cplusplus */
 #define NFS3_SETATTR ((u_long)2)
 #ifdef __cplusplus
 extern "C" {
-extern SETATTR3res *nfs3_setattr_3(...);
+extern int nfs3_setattr_3(...);
 }
 #else
-extern SETATTR3res *nfs3_setattr_3();
+extern int nfs3_setattr_3();
 #endif /* __cplusplus */
 #define NFS3_LOOKUP ((u_long)3)
 #ifdef __cplusplus
 extern "C" {
-extern LOOKUP3res *nfs3_lookup_3(...);
+extern int nfs3_lookup_3(...);
 }
 #else
-extern LOOKUP3res *nfs3_lookup_3();
+extern int nfs3_lookup_3();
 #endif /* __cplusplus */
 #define NFS3_ACCESS ((u_long)4)
 #ifdef __cplusplus
 extern "C" {
-extern ACCESS3res *nfs3_access_3(...);
+extern int nfs3_access_3(...);
 }
 #else
-extern ACCESS3res *nfs3_access_3();
+extern int nfs3_access_3();
 #endif /* __cplusplus */
 #define NFS3_READLINK ((u_long)5)
 #ifdef __cplusplus
 extern "C" {
-extern READLINK3res *nfs3_readlink_3(...);
+extern int nfs3_readlink_3(...);
 }
 #else
-extern READLINK3res *nfs3_readlink_3();
+extern int nfs3_readlink_3();
 #endif /* __cplusplus */
 #define NFS3_READ ((u_long)6)
 #ifdef __cplusplus
 extern "C" {
-extern READ3res *nfs3_read_3(...);
+extern int nfs3_read_3(...);
 }
 #else
-extern READ3res *nfs3_read_3();
+extern int nfs3_read_3();
 #endif /* __cplusplus */
 #define NFS3_WRITE ((u_long)7)
 #ifdef __cplusplus
 extern "C" {
-extern WRITE3res *nfs3_write_3(...);
+extern int nfs3_write_3(...);
 }
 #else
-extern WRITE3res *nfs3_write_3();
+extern int nfs3_write_3();
 #endif /* __cplusplus */
 #define NFS3_CREATE ((u_long)8)
 #ifdef __cplusplus
 extern "C" {
-extern CREATE3res *nfs3_create_3(...);
+extern int nfs3_create_3(...);
 }
 #else
-extern CREATE3res *nfs3_create_3();
+extern int nfs3_create_3();
 #endif /* __cplusplus */
 #define NFS3_MKDIR ((u_long)9)
 #ifdef __cplusplus
 extern "C" {
-extern MKDIR3res *nfs3_mkdir_3(...);
+extern int nfs3_mkdir_3(...);
 }
 #else
-extern MKDIR3res *nfs3_mkdir_3();
+extern int nfs3_mkdir_3();
 #endif /* __cplusplus */
 #define NFS3_SYMLINK ((u_long)10)
 #ifdef __cplusplus
 extern "C" {
-extern SYMLINK3res *nfs3_symlink_3(...);
+extern int nfs3_symlink_3(...);
 }
 #else
-extern SYMLINK3res *nfs3_symlink_3();
+extern int nfs3_symlink_3();
 #endif /* __cplusplus */
 #define NFS3_MKNOD ((u_long)11)
 #ifdef __cplusplus
 extern "C" {
-extern MKNOD3res *nfs3_mknod_3(...);
+extern int nfs3_mknod_3(...);
 }
 #else
-extern MKNOD3res *nfs3_mknod_3();
+extern int nfs3_mknod_3();
 #endif /* __cplusplus */
 #define NFS3_REMOVE ((u_long)12)
 #ifdef __cplusplus
 extern "C" {
-extern REMOVE3res *nfs3_remove_3(...);
+extern int nfs3_remove_3(...);
 }
 #else
-extern REMOVE3res *nfs3_remove_3();
+extern int nfs3_remove_3();
 #endif /* __cplusplus */
 #define NFS3_RMDIR ((u_long)13)
 #ifdef __cplusplus
 extern "C" {
-extern RMDIR3res *nfs3_rmdir_3(...);
+extern int nfs3_rmdir_3(...);
 }
 #else
-extern RMDIR3res *nfs3_rmdir_3();
+extern int nfs3_rmdir_3();
 #endif /* __cplusplus */
 #define NFS3_RENAME ((u_long)14)
 #ifdef __cplusplus
 extern "C" {
-extern RENAME3res *nfs3_rename_3(...);
+extern int nfs3_rename_3(...);
 }
 #else
-extern RENAME3res *nfs3_rename_3();
+extern int nfs3_rename_3();
 #endif /* __cplusplus */
 #define NFS3_LINK ((u_long)15)
 #ifdef __cplusplus
 extern "C" {
-extern LINK3res *nfs3_link_3(...);
+extern int nfs3_link_3(...);
 }
 #else
-extern LINK3res *nfs3_link_3();
+extern int nfs3_link_3();
 #endif /* __cplusplus */
 #define NFS3_READDIR ((u_long)16)
 #ifdef __cplusplus
 extern "C" {
-extern READDIR3res *nfs3_readdir_3(...);
+extern int nfs3_readdir_3(...);
 }
 #else
-extern READDIR3res *nfs3_readdir_3();
+extern int nfs3_readdir_3();
 #endif /* __cplusplus */
 #define NFS3_READDIRPLUS ((u_long)17)
 #ifdef __cplusplus
 extern "C" {
-extern READDIRPLUS3res *nfs3_readdirplus_3(...);
+extern int nfs3_readdirplus_3(...);
 }
 #else
-extern READDIRPLUS3res *nfs3_readdirplus_3();
+extern int nfs3_readdirplus_3();
 #endif /* __cplusplus */
 #define NFS3_FSSTAT ((u_long)18)
 #ifdef __cplusplus
 extern "C" {
-extern FSSTAT3res *nfs3_fsstat_3(...);
+extern int nfs3_fsstat_3(...);
 }
 #else
-extern FSSTAT3res *nfs3_fsstat_3();
+extern int nfs3_fsstat_3();
 #endif /* __cplusplus */
 #define NFS3_FSINFO ((u_long)19)
 #ifdef __cplusplus
 extern "C" {
-extern FSINFO3res *nfs3_fsinfo_3(...);
+extern int nfs3_fsinfo_3(...);
 }
 #else
-extern FSINFO3res *nfs3_fsinfo_3();
+extern int nfs3_fsinfo_3();
 #endif /* __cplusplus */
 #define NFS3_PATHCONF ((u_long)20)
 #ifdef __cplusplus
 extern "C" {
-extern PATHCONF3res *nfs3_pathconf_3(...);
+extern int nfs3_pathconf_3(...);
 }
 #else
-extern PATHCONF3res *nfs3_pathconf_3();
+extern int nfs3_pathconf_3();
 #endif /* __cplusplus */
 #define NFS3_COMMIT ((u_long)21)
 #ifdef __cplusplus
 extern "C" {
-extern COMMIT3res *nfs3_commit_3(...);
+extern int nfs3_commit_3(...);
 }
 #else
-extern COMMIT3res *nfs3_commit_3();
+extern int nfs3_commit_3();
 #endif /* __cplusplus */
 
 
@@ -2256,25 +2256,25 @@ bool_t xdr_SETACL3res();
 #define NFSACL3_NULL ((u_long)0)
 #ifdef __cplusplus
 extern "C" {
-extern void *nfsacl3_null_3(...);
+extern int nfsacl3_null_3(...);
 }
 #else
-extern void *nfsacl3_null_3();
+extern int nfsacl3_null_3();
 #endif /* __cplusplus */
 #define NFSACL3_GETACL ((u_long)1)
 #ifdef __cplusplus
 extern "C" {
-extern GETACL3res *nfsacl3_getacl_3(...);
+extern int nfsacl3_getacl_3(...);
 }
 #else
-extern GETACL3res *nfsacl3_getacl_3();
+extern int nfsacl3_getacl_3();
 #endif /* __cplusplus */
 #define NFSACL3_SETACL ((u_long)2)
 #ifdef __cplusplus
 extern "C" {
-extern SETACL3res *nfsacl3_setacl_3(...);
+extern int nfsacl3_setacl_3(...);
 }
 #else
-extern SETACL3res *nfsacl3_setacl_3();
+extern int nfsacl3_setacl_3();
 #endif /* __cplusplus */
 
