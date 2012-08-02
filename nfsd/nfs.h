@@ -13,7 +13,7 @@ bool_t xdr_cookieverf3(...);
 bool_t xdr_cookieverf3();
 #endif
 
-typedef unsigned long long uint64;
+typedef unsigned __int64 uint64;
 
 #ifdef __cplusplus
 extern "C" {

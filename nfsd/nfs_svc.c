@@ -3,88 +3,8 @@
 #include <rpc/pmap_cln.h>
 #include "nfs.h"
 
-static void nfs_program_3();
-static void nfsacl_program_3();
-
-void main()
-{
-	SVCXPRT *transp;
-
-#ifdef WIN32
-	rpc_nt_init();
-#endif
-
-	(void)pmap_unset(NFS_PROGRAM, NFS_V3);
-	(void)pmap_unset(NFSACL_PROGRAM, NFSACL_V3);
-
-	transp = svcudp_create(RPC_ANYSOCK);
-	if (transp == NULL) {
-		(void)fprintf(stderr, "cannot create udp service.\n");
-#ifdef WIN32
-		rpc_nt_exit();
-#endif
-		exit(1);
-	}
-	if (!svc_register(transp, NFS_PROGRAM, NFS_V3, nfs_program_3, IPPROTO_UDP)) {
-		(void)fprintf(stderr, "unable to register (NFS_PROGRAM, NFS_V3, udp).\n");
-#ifdef WIN32
-		rpc_nt_exit();
-#endif
-		exit(1);
-	}
-	if (!svc_register(transp, NFSACL_PROGRAM, NFSACL_V3, nfsacl_program_3, IPPROTO_UDP)) {
-		(void)fprintf(stderr, "unable to register (NFSACL_PROGRAM, NFSACL_V3, udp).\n");
-#ifdef WIN32
-		rpc_nt_exit();
-#endif
-		exit(1);
-	}
-
-	transp = svctcp_create(RPC_ANYSOCK, 0, 0);
-	if (transp == NULL) {
-		(void)fprintf(stderr, "cannot create tcp service.\n");
-#ifdef WIN32
-		rpc_nt_exit();
-#endif
-		exit(1);
-	}
-	if (!svc_register(transp, NFS_PROGRAM, NFS_V3, nfs_program_3, IPPROTO_TCP)) {
-		(void)fprintf(stderr, "unable to register (NFS_PROGRAM, NFS_V3, tcp).\n");
-#ifdef WIN32
-		rpc_nt_exit();
-#endif
-		exit(1);
-	}
-	if (!svc_register(transp, NFSACL_PROGRAM, NFSACL_V3, nfsacl_program_3, IPPROTO_TCP)) {
-		(void)fprintf(stderr, "unable to register (NFSACL_PROGRAM, NFSACL_V3, tcp).\n");
-#ifdef WIN32
-		rpc_nt_exit();
-#endif
-		exit(1);
-	}
-	svc_run();
-	(void)fprintf(stderr, "svc_run returned\n");
-#ifdef WIN32
-	rpc_nt_exit();
-#endif
-	exit(1);
-}
-
-#ifdef MULTITHREAD
-struct call_params {
-	struct svc_req *rqstp;
-	SVCXPRT *transp;
-	void *arg;
-	char *(*local)();
-	bool_t (*xdr_argument)(), (*xdr_result)();
-};
-static void nfs_program_3_a ();
-#endif
-
 static void
-nfs_program_3(rqstp, transp)
-	struct svc_req *rqstp;
-	SVCXPRT *transp;
+nfs_program_3(struct svc_req *rqstp, SVCXPRT *transp)
 {
 	union {
 		GETATTR3args nfs3_getattr_3_arg;
@@ -113,12 +33,6 @@ nfs_program_3(rqstp, transp)
 	bool_t (*xdr_argument)(), (*xdr_result)();
 	char *(*local)();
 
-
-#ifdef MULTITHREAD
-	DWORD TID = 0;
-	HANDLE threadHandle = NULL;
-	struct call_params	*params;
-#endif
 	switch (rqstp->rq_proc) {
 	case NFS3_NULL:
 		xdr_argument = xdr_void;
@@ -262,59 +176,10 @@ nfs_program_3(rqstp, transp)
 		return;
 	}
 
-#ifdef MULTITHREAD
-	params = (struct call_params*) malloc (sizeof(struct call_params));
-
-	params->rqstp = (struct svc_req*) malloc (sizeof(struct svc_req));
-	bcopy(rqstp, params->rqstp, sizeof(struct svc_req));
-
-	params->transp = transp;
-
-	params->arg = malloc (sizeof(argument));
-	bcopy(&argument, params->arg, sizeof(argument));
-
-	params->local = local;
-
-	params->xdr_argument = xdr_argument;
-	params->xdr_result = xdr_result;
-
-	threadHandle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)nfs_program_3_a, params, 0, &TID);
-	if (!threadHandle)
-		nfs_program_3_a(&params);
-}
-
-static void
-nfs_program_3_a(params)
-struct call_params *params;
-{
-	struct svc_req *rqstp;
-	SVCXPRT *transp;
-	void *argument;
-	void (*destroy_proc)();
-
-	char *result;
-	bool_t (*xdr_argument)(), (*xdr_result)();
-	char *(*local)();
-
-
-	argument = params->arg;
-	rqstp = params->rqstp;
-	transp = params->transp;
-	xdr_argument = params->xdr_argument;
-	xdr_result = params->xdr_result;
-	local = params->local;
-	destroy_proc = transp->xp_ops->xp_destroy;
-	transp->xp_ops->xp_destroy = xprt_unregister;
-#endif
-
 	result = (*local)(&argument, rqstp);
 	if (result != NULL && !svc_sendreply(transp, xdr_result, result)) {
 		svcerr_systemerr(transp);
 	}
-#ifdef MULTITHREAD
-	free(params->rqstp);
-	free(params);
-#endif
 	if (!svc_freeargs(transp, xdr_argument, &argument)) {
 		(void)fprintf(stderr, "unable to free arguments\n");
 #ifdef WIN32
@@ -322,28 +187,10 @@ struct call_params *params;
 #endif
 		exit(1);
 	}
-#ifdef MULTITHREAD
-	free(argument);
-	transp->xp_ops->xp_destroy = destroy_proc;
-#endif
 }
 
-
-#ifdef MULTITHREAD
-struct call_params {
-	struct svc_req *rqstp;
-	SVCXPRT *transp;
-	void *arg;
-	char *(*local)();
-	bool_t (*xdr_argument)(), (*xdr_result)();
-};
-static void nfsacl_program_3_a ();
-#endif
-
 static void
-nfsacl_program_3(rqstp, transp)
-	struct svc_req *rqstp;
-	SVCXPRT *transp;
+nfsacl_program_3(struct svc_req *rqstp, SVCXPRT *transp)
 {
 	union {
 		GETACL3args nfsacl3_getacl_3_arg;
@@ -353,12 +200,6 @@ nfsacl_program_3(rqstp, transp)
 	bool_t (*xdr_argument)(), (*xdr_result)();
 	char *(*local)();
 
-
-#ifdef MULTITHREAD
-	DWORD TID = 0;
-	HANDLE threadHandle = NULL;
-	struct call_params	*params;
-#endif
 	switch (rqstp->rq_proc) {
 	case NFSACL3_NULL:
 		xdr_argument = xdr_void;
@@ -388,59 +229,10 @@ nfsacl_program_3(rqstp, transp)
 		return;
 	}
 
-#ifdef MULTITHREAD
-	params = (struct call_params*) malloc (sizeof(struct call_params));
-
-	params->rqstp = (struct svc_req*) malloc (sizeof(struct svc_req));
-	bcopy(rqstp, params->rqstp, sizeof(struct svc_req));
-
-	params->transp = transp;
-
-	params->arg = malloc (sizeof(argument));
-	bcopy(&argument, params->arg, sizeof(argument));
-
-	params->local = local;
-
-	params->xdr_argument = xdr_argument;
-	params->xdr_result = xdr_result;
-
-	threadHandle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)nfsacl_program_3_a, params, 0, &TID);
-	if (!threadHandle)
-		nfsacl_program_3_a(&params);
-}
-
-static void
-nfsacl_program_3_a(params)
-struct call_params *params;
-{
-	struct svc_req *rqstp;
-	SVCXPRT *transp;
-	void *argument;
-	void (*destroy_proc)();
-
-	char *result;
-	bool_t (*xdr_argument)(), (*xdr_result)();
-	char *(*local)();
-
-
-	argument = params->arg;
-	rqstp = params->rqstp;
-	transp = params->transp;
-	xdr_argument = params->xdr_argument;
-	xdr_result = params->xdr_result;
-	local = params->local;
-	destroy_proc = transp->xp_ops->xp_destroy;
-	transp->xp_ops->xp_destroy = xprt_unregister;
-#endif
-
 	result = (*local)(&argument, rqstp);
 	if (result != NULL && !svc_sendreply(transp, xdr_result, result)) {
 		svcerr_systemerr(transp);
 	}
-#ifdef MULTITHREAD
-	free(params->rqstp);
-	free(params);
-#endif
 	if (!svc_freeargs(transp, xdr_argument, &argument)) {
 		(void)fprintf(stderr, "unable to free arguments\n");
 #ifdef WIN32
@@ -448,9 +240,58 @@ struct call_params *params;
 #endif
 		exit(1);
 	}
-#ifdef MULTITHREAD
-	free(argument);
-	transp->xp_ops->xp_destroy = destroy_proc;
-#endif
 }
 
+int main(int argc, char *argv[])
+{
+	SVCXPRT *transp;
+	int error = 0;
+
+#ifdef WIN32
+	rpc_nt_init();
+#endif
+
+	pmap_unset(NFS_PROGRAM, NFS_V3);
+	pmap_unset(NFSACL_PROGRAM, NFSACL_V3);
+
+	transp = svcudp_create(RPC_ANYSOCK);
+	if (transp == NULL) {
+		fprintf(stderr, "cannot create udp service.\n");
+		error = -1;
+		goto end;
+	}
+	if (!svc_register(transp, NFS_PROGRAM, NFS_V3, nfs_program_3, IPPROTO_UDP)) {
+		fprintf(stderr, "unable to register (NFS_PROGRAM, NFS_V3, udp).\n");
+		error = -2;
+		goto end;
+	}
+	if (!svc_register(transp, NFSACL_PROGRAM, NFSACL_V3, nfsacl_program_3, IPPROTO_UDP)) {
+		fprintf(stderr, "unable to register (NFSACL_PROGRAM, NFSACL_V3, udp).\n");
+		error = -3;
+		goto end;
+	}
+
+	transp = svctcp_create(RPC_ANYSOCK, 0, 0);
+	if (transp == NULL) {
+		fprintf(stderr, "cannot create tcp service.\n");
+		error = -4;
+		goto end;
+	}
+	if (!svc_register(transp, NFS_PROGRAM, NFS_V3, nfs_program_3, IPPROTO_TCP)) {
+		fprintf(stderr, "unable to register (NFS_PROGRAM, NFS_V3, tcp).\n");
+		error = -5;
+		goto end;
+	}
+	if (!svc_register(transp, NFSACL_PROGRAM, NFSACL_V3, nfsacl_program_3, IPPROTO_TCP)) {
+		fprintf(stderr, "unable to register (NFSACL_PROGRAM, NFSACL_V3, tcp).\n");
+		error = -6;
+		goto end;
+	}
+	svc_run();
+	fprintf(stderr, "svc_run returned\n");
+end:
+#ifdef WIN32
+	rpc_nt_exit();
+#endif
+	return error;
+}
